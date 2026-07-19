@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sentinels Sign-In — Visitor Management Made Simple</title>
+<meta name="description" content="Sentinels Sign-In is the modern visitor management system: kiosk check-in, pre-registration, QR badges, photo capture, evacuation lists, and real-time host notifications.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal:#0D7377; --teal-bright:#14919B; --cyan:#14FFEC; --navy:#0F172A; --navy-2:#1E293B;
+    --ink:#212121; --muted:#5C6B7A; --bg:#FAFCFC; --white:#FFFFFF; --orange:#FF6B35;
+    --radius:16px; --shadow:0 10px 40px rgba(15,23,42,.08);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased}
+  img{max-width:100%;display:block}
+  a{text-decoration:none;color:inherit}
+  .container{max-width:1160px;margin:0 auto;padding:0 24px}
+  .eyebrow{display:inline-block;font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:14px}
+  h1,h2,h3{line-height:1.15;letter-spacing:-.02em;color:var(--navy)}
+  .section{padding:96px 0}
+  .section-head{text-align:center;max-width:680px;margin:0 auto 56px}
+  .section-head h2{font-size:clamp(28px,4vw,42px);font-weight:800;margin-bottom:16px}
+  .section-head p{color:var(--muted);font-size:17px}
+  .btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:15px;padding:13px 26px;border-radius:999px;border:none;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease,background .15s ease}
+  .btn:hover{transform:translateY(-2px)}
+  .btn-primary{background:var(--teal);color:#fff;box-shadow:0 8px 24px rgba(13,115,119,.35)}
+  .btn-primary:hover{background:var(--teal-bright)}
+  .btn-ghost{background:transparent;color:var(--navy);border:1.5px solid #D5DEE4}
+  .btn-ghost:hover{border-color:var(--teal);color:var(--teal)}
+  .btn-light{background:#fff;color:var(--navy)}
+  .btn-lg{padding:16px 34px;font-size:16px}
+
+  /* NAV */
+  .nav{position:fixed;top:0;left:0;right:0;z-index:100;transition:background .25s ease,box-shadow .25s ease}
+  .nav.scrolled{background:rgba(255,255,255,.92);backdrop-filter:blur(12px);box-shadow:0 1px 0 rgba(15,23,42,.08)}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:72px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;color:#fff}
+  .nav.scrolled .logo{color:var(--navy)}
+  .logo-mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--teal),var(--teal-bright));display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .logo-mark svg{width:20px;height:20px}
+  .nav-links{display:flex;align-items:center;gap:32px}
+  .nav-links a{font-size:14.5px;font-weight:500;color:rgba(255,255,255,.85);transition:color .15s}
+  .nav.scrolled .nav-links a{color:var(--muted)}
+  .nav-links a:hover{color:var(--cyan)}
+  .nav.scrolled .nav-links a:hover{color:var(--teal)}
+  .nav-cta{display:flex;align-items:center;gap:12px}
+  .nav .btn{padding:10px 20px;font-size:14px}
+  .nav-signin{color:rgba(255,255,255,.85)!important}
+  .nav.scrolled .nav-signin{color:var(--navy)!important}
+  .hamburger{display:none;background:none;border:none;cursor:pointer;padding:8px}
+  .hamburger span{display:block;width:24px;height:2px;background:#fff;margin:5px 0;border-radius:2px;transition:.2s}
+  .nav.scrolled .hamburger span{background:var(--navy)}
+
+  /* HERO */
+  .hero{background:linear-gradient(160deg,var(--navy) 0%,#123B4F 55%,var(--teal) 130%);color:#fff;padding:170px 0 110px;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;top:-220px;right:-180px;width:640px;height:640px;border-radius:50%;background:radial-gradient(circle,rgba(20,255,236,.14),transparent 65%)}
+  .hero::after{content:'';position:absolute;bottom:-260px;left:-160px;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle,rgba(255,107,53,.12),transparent 65%)}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:60px;align-items:center;position:relative;z-index:1}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(20,255,236,.1);border:1px solid rgba(20,255,236,.3);color:var(--cyan);font-size:13px;font-weight:600;padding:7px 16px;border-radius:999px;margin-bottom:24px}
+  .hero h1{color:#fff;font-size:clamp(36px,5.2vw,58px);font-weight:900;margin-bottom:22px}
+  .hero h1 .accent{background:linear-gradient(90deg,var(--cyan),var(--teal-bright));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .hero p.lead{font-size:18.5px;color:rgba(255,255,255,.78);max-width:520px;margin-bottom:36px}
+  .hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:34px}
+  .hero-proof{display:flex;gap:28px;flex-wrap:wrap}
+  .hero-proof div{font-size:13.5px;color:rgba(255,255,255,.65)}
+  .hero-proof strong{display:block;font-size:22px;color:#fff;font-weight:800}
+
+  /* kiosk mockup */
+  .kiosk-frame{background:#0B1120;border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:18px;box-shadow:0 30px 80px rgba(0,0,0,.45);transform:rotate(1.5deg)}
+  .kiosk-screen{background:linear-gradient(170deg,#12202E,#0D7377 160%);border-radius:14px;padding:36px 28px;text-align:center}
+  .kiosk-screen .shield{width:54px;height:54px;margin:0 auto 18px;border-radius:14px;background:rgba(20,255,236,.14);display:flex;align-items:center;justify-content:center}
+  .kiosk-screen h3{color:#fff;font-size:21px;margin-bottom:6px}
+  .kiosk-screen p{color:rgba(255,255,255,.6);font-size:13.5px;margin-bottom:22px}
+  .kiosk-btn{display:block;width:100%;padding:13px;border-radius:10px;font-weight:700;font-size:14px;margin-bottom:10px;border:none}
+  .kiosk-btn.teal{background:var(--teal-bright);color:#fff}
+  .kiosk-btn.outline{background:transparent;border:1.5px solid rgba(255,255,255,.3);color:#fff}
+  .kiosk-btn.ghost{background:rgba(255,255,255,.07);color:rgba(255,255,255,.75)}
+  .kiosk-scan{margin-top:16px;border:1.5px dashed rgba(20,255,236,.45);border-radius:10px;padding:12px;color:var(--cyan);font-size:12.5px;font-weight:600}
+
+  /* trust bar */
+  .trust{background:#fff;border-bottom:1px solid #EDF2F4;padding:26px 0}
+  .trust-inner{display:flex;align-items:center;justify-content:center;gap:44px;flex-wrap:wrap;color:var(--muted);font-size:14px;font-weight:600}
+  .trust-inner svg{width:18px;height:18px;vertical-align:-4px;margin-right:7px}
+
+  /* how it works */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+  .step{background:#fff;border:1px solid #EAF0F2;border-radius:var(--radius);padding:30px 24px;position:relative;transition:transform .2s,box-shadow .2s}
+  .step:hover{transform:translateY(-5px);box-shadow:var(--shadow)}
+  .step-num{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,var(--teal),var(--teal-bright));color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;margin-bottom:18px;font-size:16px}
+  .step h3{font-size:17px;margin-bottom:8px}
+  .step p{font-size:14px;color:var(--muted)}
+
+  /* features */
+  .features-section{background:linear-gradient(180deg,#fff, #F2F8F8)}
+  .features{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .feature{background:#fff;border:1px solid #EAF0F2;border-radius:var(--radius);padding:28px 26px;transition:transform .2s,box-shadow .2s}
+  .feature:hover{transform:translateY(-5px);box-shadow:var(--shadow)}
+  .feature-icon{width:46px;height:46px;border-radius:12px;background:rgba(13,115,119,.09);display:flex;align-items:center;justify-content:center;margin-bottom:18px}
+  .feature-icon svg{width:22px;height:22px;stroke:var(--teal)}
+  .feature h3{font-size:16.5px;margin-bottom:7px}
+  .feature p{font-size:14px;color:var(--muted)}
+
+  /* split / security */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+  .split h2{font-size:clamp(26px,3.4vw,38px);font-weight:800;margin-bottom:18px}
+  .split p{color:var(--muted);margin-bottom:14px;font-size:16px}
+  .check-list{list-style:none;margin-top:22px}
+  .check-list li{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px;font-size:15px;color:var(--navy-2)}
+  .check-list svg{width:20px;height:20px;stroke:var(--teal);flex-shrink:0;margin-top:2px}
+  .panel{background:linear-gradient(160deg,var(--navy),#12303F);border-radius:22px;padding:36px;color:#fff;box-shadow:var(--shadow)}
+  .panel-row{display:flex;align-items:center;justify-content:space-between;padding:15px 0;border-bottom:1px solid rgba(255,255,255,.09);font-size:14.5px}
+  .panel-row:last-child{border:none}
+  .pill{font-size:11.5px;font-weight:700;padding:4px 12px;border-radius:999px}
+  .pill.green{background:rgba(16,185,129,.18);color:#34D399}
+  .pill.cyan{background:rgba(20,255,236,.12);color:var(--cyan)}
+  .pill.orange{background:rgba(255,107,53,.16);color:#FFA07A}
+
+  /* comparison */
+  .compare-wrap{overflow-x:auto}
+  table.compare{width:100%;border-collapse:collapse;background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);min-width:640px}
+  .compare th,.compare td{padding:16px 20px;text-align:left;font-size:14.5px;border-bottom:1px solid #EEF3F5}
+  .compare thead th{background:var(--navy);color:#fff;font-size:13.5px;font-weight:700}
+  .compare thead th.us{background:var(--teal)}
+  .compare td.us{font-weight:600;color:var(--teal);background:rgba(13,115,119,.05)}
+  .compare tbody tr:last-child td{border-bottom:none}
+  .yes{color:var(--teal);font-weight:700}
+  .no{color:#C4CFD6}
+
+  /* pricing */
+  .pricing-section{background:linear-gradient(180deg,#F2F8F8,#fff)}
+  .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch}
+  .plan{background:#fff;border:1.5px solid #E7EEF0;border-radius:20px;padding:36px 30px;display:flex;flex-direction:column;position:relative;transition:transform .2s,box-shadow .2s}
+  .plan:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
+  .plan.featured{border-color:var(--teal);box-shadow:0 20px 60px rgba(13,115,119,.18)}
+  .plan-tag{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--orange);color:#fff;font-size:12px;font-weight:700;padding:5px 16px;border-radius:999px;letter-spacing:.04em}
+  .plan h3{font-size:19px;margin-bottom:6px}
+  .plan .desc{font-size:13.5px;color:var(--muted);margin-bottom:22px;min-height:40px}
+  .price{font-size:44px;font-weight:900;color:var(--navy);letter-spacing:-.03em}
+  .price span{font-size:15px;font-weight:500;color:var(--muted)}
+  .plan ul{list-style:none;margin:26px 0 30px;flex:1}
+  .plan ul li{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--navy-2);margin-bottom:11px}
+  .plan ul svg{width:17px;height:17px;stroke:var(--teal);flex-shrink:0;margin-top:3px}
+  .plan .btn{justify-content:center}
+  .pricing-note{text-align:center;color:var(--muted);font-size:13.5px;margin-top:30px}
+
+  /* CTA / request access */
+  .cta-section{background:linear-gradient(150deg,var(--navy) 0%,#0E3A46 60%,var(--teal) 140%);color:#fff;position:relative;overflow:hidden}
+  .cta-section::before{content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:800px;height:800px;border-radius:50%;background:radial-gradient(circle,rgba(20,255,236,.1),transparent 60%)}
+  .cta-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;position:relative;z-index:1}
+  .cta-grid h2{color:#fff;font-size:clamp(28px,3.6vw,40px);font-weight:800;margin-bottom:16px}
+  .cta-grid .sub{color:rgba(255,255,255,.72);font-size:16.5px;margin-bottom:26px}
+  .cta-points{list-style:none}
+  .cta-points li{display:flex;gap:12px;align-items:center;margin-bottom:13px;font-size:15px;color:rgba(255,255,255,.88)}
+  .cta-points svg{width:19px;height:19px;stroke:var(--cyan);flex-shrink:0}
+  .form-card{background:#fff;border-radius:20px;padding:36px;box-shadow:0 30px 80px rgba(0,0,0,.35)}
+  .form-card h3{font-size:20px;margin-bottom:4px}
+  .form-card .fc-sub{font-size:13.5px;color:var(--muted);margin-bottom:24px}
+  .field{margin-bottom:16px}
+  .field label{display:block;font-size:13px;font-weight:600;color:var(--navy-2);margin-bottom:6px}
+  .field input,.field select{width:100%;padding:12px 14px;border:1.5px solid #DCE5E9;border-radius:10px;font-size:14.5px;font-family:inherit;transition:border-color .15s}
+  .field input:focus,.field select:focus{outline:none;border-color:var(--teal)}
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .form-card .btn{width:100%;justify-content:center;margin-top:6px}
+  .form-msg{display:none;margin-top:14px;padding:13px 16px;border-radius:10px;font-size:14px;font-weight:500}
+  .form-msg.ok{background:#ECFDF5;color:#047857;border:1px solid #A7F3D0}
+  .form-msg.err{background:#FEF2F2;color:#B91C1C;border:1px solid #FECACA}
+  .form-note{font-size:12px;color:var(--muted);text-align:center;margin-top:14px}
+
+  /* footer */
+  footer{background:var(--navy);color:rgba(255,255,255,.65);padding:64px 0 34px}
+  .footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:44px;margin-bottom:48px}
+  .footer-grid .logo{color:#fff;margin-bottom:14px}
+  .footer-grid p{font-size:13.5px;max-width:280px}
+  .footer-grid h4{color:#fff;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px}
+  .footer-grid ul{list-style:none}
+  .footer-grid ul li{margin-bottom:10px}
+  .footer-grid ul a{font-size:14px;transition:color .15s}
+  .footer-grid ul a:hover{color:var(--cyan)}
+  .footer-bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:26px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:13px}
+  .footer-bottom a{color:rgba(255,255,255,.65)}
+  .footer-bottom a:hover{color:var(--cyan)}
+
+  /* responsive */
+  @media (max-width:960px){
+    .hero-grid,.split,.cta-grid{grid-template-columns:1fr;gap:44px}
+    .steps{grid-template-columns:repeat(2,1fr)}
+    .features{grid-template-columns:repeat(2,1fr)}
+    .plans{grid-template-columns:1fr;max-width:460px;margin:0 auto}
+    .footer-grid{grid-template-columns:1fr 1fr}
+    .kiosk-frame{transform:none;max-width:420px;margin:0 auto}
+  }
+  @media (max-width:720px){
+    .nav-links,.nav-cta .btn{display:none}
+    .hamburger{display:block}
+    .nav.open .nav-links{display:flex;position:absolute;top:72px;left:0;right:0;background:#fff;flex-direction:column;padding:22px 24px;gap:18px;box-shadow:0 20px 40px rgba(15,23,42,.12)}
+    .nav.open .nav-links a{color:var(--navy)}
+    .section{padding:70px 0}
+    .features{grid-template-columns:1fr}
+    .field-row{grid-template-columns:1fr}
+    .hero{padding:140px 0 80px}
+  }
+  @media (max-width:520px){ .steps{grid-template-columns:1fr} .footer-grid{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="container nav-inner">
+    <a href="#" class="logo">
+      <span class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+      </span>
+      Sentinels&nbsp;Sign-In
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#how">How It Works</a>
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#compare">Compare</a>
+      <a href="https://app.sentinelskiosk.com/login" class="nav-signin">Sign In</a>
+    </div>
+    <div class="nav-cta">
+      <a href="#request" class="btn btn-primary">Request Access</a>
+      <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="container hero-grid">
+    <div>
+      <span class="hero-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Visitor management, reimagined
+      </span>
+      <h1>Know exactly <span class="accent">who's in your building</span> — always.</h1>
+      <p class="lead">Sentinels Sign-In turns any tablet into a smart front-desk kiosk. Pre-register guests, scan QR codes, capture photos, notify hosts instantly, and pull a live evacuation list in one tap.</p>
+      <div class="hero-actions">
+        <a href="#request" class="btn btn-primary btn-lg">Request Access</a>
+        <a href="#how" class="btn btn-light btn-lg">See How It Works</a>
+      </div>
+      <div class="hero-proof">
+        <div><strong>&lt; 10 sec</strong>average check-in time</div>
+        <div><strong>1 tap</strong>full evacuation roster</div>
+        <div><strong>100%</strong>digital visitor record</div>
+      </div>
+    </div>
+    <div class="kiosk-frame">
+      <div class="kiosk-screen">
+        <div class="shield">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#14FFEC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+        </div>
+        <h3>Welcome to SentinelsIT</h3>
+        <p>Please choose an option to continue</p>
+        <button class="kiosk-btn teal">✓ &nbsp;Check In</button>
+        <button class="kiosk-btn outline">↩ &nbsp;Check Out</button>
+        <button class="kiosk-btn ghost">▦ &nbsp;Scan QR to Check In</button>
+        <div class="kiosk-scan">▣ &nbsp;QR &amp; staff-badge scanning built in</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- TRUST BAR -->
+<div class="trust">
+  <div class="container trust-inner">
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="#0D7377" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>Encrypted &amp; secure by design</span>
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="#0D7377" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Real-time host notifications</span>
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="#0D7377" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>Multi-tenant &amp; role-based</span>
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="#0D7377" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>No hardware to buy — any tablet works</span>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="section" id="how">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">How It Works</span>
+      <h2>From invite to evacuation list in four steps</h2>
+      <p>A complete visitor journey — before they arrive, while they're on site, and when it matters most.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Pre-register guests</h3>
+        <p>Staff create visits in seconds. Guests get a branded email with a QR code — no app to install.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Scan or tap to check in</h3>
+        <p>Visitors scan their QR at the kiosk camera, or tap Check In. Employees use printed staff QR badges.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Hosts notified instantly</h3>
+        <p>Email and SMS alerts reach the right host the moment their guest arrives — photo included.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h3>One-tap evacuation list</h3>
+        <p>See and print everyone on site right now — visitors and staff — from any device, any time.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section features-section" id="features">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Features</span>
+      <h2>Everything a modern front desk needs</h2>
+      <p>Purpose-built for offices, schools, clinics, warehouses, and multi-site organizations.</p>
+    </div>
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+        <h3>Pre-Registration &amp; Invitations</h3>
+        <p>Send branded email invitations with QR codes and visit details. Track status from sent → opened → in building → checked out.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14h1v1h-1zM14 20h1v1h-1zM18 18h3v3h-3z"/></svg></div>
+        <h3>QR Check-In &amp; Staff Badges</h3>
+        <p>Guests scan their invitation QR at the kiosk camera. Employees print ID badges and tap in/out with the same flow.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+        <h3>Photo Capture</h3>
+        <p>Optionally snap a visitor photo at check-in — admin-toggleable per organization. Photos appear in the live visit log.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div>
+        <h3>Instant Host Notifications</h3>
+        <p>Email and SMS alerts powered by SendGrid and Twilio. Hosts know the second their guest arrives.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg></div>
+        <h3>Evacuation List &amp; Reports</h3>
+        <p>Live on-site roster with one-tap print for roll call. Export full visit history to CSV whenever you need it.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></div>
+        <h3>Any Device, Anywhere</h3>
+        <p>The kiosk runs on any tablet, iPad, or touchscreen in the browser. The admin dashboard is fully mobile-responsive.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+        <h3>MFA &amp; Org-Wide Enforcement</h3>
+        <p>Authenticator-app MFA for every user, with an admin switch to require it organization-wide. Role-based access built in.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg></div>
+        <h3>Offline Kiosk Alerts</h3>
+        <p>The kiosk phones home every minute. If it goes quiet, admins get an automatic email — and another when it recovers.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+        <h3>Multi-Tenant &amp; Teams</h3>
+        <p>Separate organizations, each with their own admins, receptionists, hosts, and settings. Managed centrally by you.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECURITY / ADMIN SPLIT -->
+<section class="section">
+  <div class="container split">
+    <div>
+      <span class="eyebrow">Admin Control</span>
+      <h2>A dashboard your front desk will actually love</h2>
+      <p>Everything happening across your locations, in one clean view — designed for receptionists, powerful enough for security teams.</p>
+      <ul class="check-list">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Live dashboard: on-site now, expected today, recent activity</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Printable evacuation list &amp; one-click CSV export</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Team management: invite admins &amp; receptionists, reset passwords</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Per-org settings: photo capture, notifications, MFA enforcement</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Staff ID badge printing with QR — employees tap in and out</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <div class="panel-row"><span>🔴 &nbsp;John Carter — Acme Corp</span><span class="pill green">ON SITE</span></div>
+      <div class="panel-row"><span>📷 &nbsp;Maria Lopez — Interview</span><span class="pill green">ON SITE</span></div>
+      <div class="panel-row"><span>📦 &nbsp;Delivery — FedEx</span><span class="pill cyan">EXPECTED 2:30 PM</span></div>
+      <div class="panel-row"><span>🪪 &nbsp;Staff — Front Desk Team</span><span class="pill green">12 BADGED IN</span></div>
+      <div class="panel-row"><span>⚠️ &nbsp;Kiosk #2 — Warehouse</span><span class="pill orange">OFFLINE — ALERT SENT</span></div>
+      <div class="panel-row"><span>🖨️ &nbsp;Evacuation List</span><span class="pill cyan">PRINTED 09:41 AM</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section class="section" id="compare" style="padding-top:20px">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Why Switch</span>
+      <h2>Enterprise features, without the enterprise invoice</h2>
+      <p>The essentials competitors lock behind expensive tiers — included here from day one.</p>
+    </div>
+    <div class="compare-wrap">
+      <table class="compare">
+        <thead>
+          <tr><th>Capability</th><th class="us">Sentinels Sign-In</th><th>SignInApp</th><th>Envoy</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>QR check-in (guests &amp; staff)</td><td class="us yes">✓ Included</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td>Photo capture at kiosk</td><td class="us yes">✓ Included</td><td>Higher tiers</td><td>Higher tiers</td></tr>
+          <tr><td>SMS host notifications</td><td class="us yes">✓ Included</td><td>Add-on</td><td>Add-on</td></tr>
+          <tr><td>Printable staff ID badges</td><td class="us yes">✓ Included</td><td class="no">—</td><td>Higher tiers</td></tr>
+          <tr><td>Offline kiosk monitoring &amp; alerts</td><td class="us yes">✓ Included</td><td class="no">—</td><td class="no">—</td></tr>
+          <tr><td>One-tap evacuation list</td><td class="us yes">✓ Included</td><td class="yes">✓</td><td>Higher tiers</td></tr>
+          <tr><td>Org-wide MFA enforcement</td><td class="us yes">✓ Included</td><td>Higher tiers</td><td>Higher tiers</td></tr>
+          <tr><td>Multi-tenant management</td><td class="us yes">✓ Built-in</td><td class="no">—</td><td>Enterprise only</td></tr>
+          <tr><td>Starting price</td><td class="us">Free — Pro from $49/mo</td><td>~$65/mo</td><td>~$109/mo</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section pricing-section" id="pricing">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Pricing</span>
+      <h2>Simple plans that scale with you</h2>
+      <p>Start free. Upgrade when your front desk does. No hardware, no contracts, no surprises.</p>
+    </div>
+    <div class="plans">
+      <div class="plan">
+        <h3>Starter</h3>
+        <p class="desc">For small offices getting started with digital check-in.</p>
+        <div class="price">$0<span> /month</span></div>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>1 kiosk, 1 location</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Up to 100 visits / month</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Visitor check-in &amp; check-out</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Email host notifications</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Live visit log &amp; CSV export</li>
+        </ul>
+        <a href="#request" class="btn btn-ghost">Request Access</a>
+      </div>
+      <div class="plan featured">
+        <span class="plan-tag">MOST POPULAR</span>
+        <h3>Pro</h3>
+        <p class="desc">For busy front desks that need the full visitor journey.</p>
+        <div class="price">$49<span> /month</span></div>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Everything in Starter</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Unlimited visits, up to 3 kiosks</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Pre-registration + QR invitations</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Photo capture &amp; SMS notifications</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Staff QR badges &amp; evacuation list</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>MFA &amp; offline kiosk alerts</li>
+        </ul>
+        <a href="#request" class="btn btn-primary">Request Access</a>
+      </div>
+      <div class="plan">
+        <h3>Enterprise</h3>
+        <p class="desc">For multi-site organizations and managed deployments.</p>
+        <div class="price">$149<span> /month</span></div>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Everything in Pro</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Unlimited kiosks &amp; locations</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Multi-tenant org management</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Custom branding &amp; onboarding help</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Priority support</li>
+        </ul>
+        <a href="#request" class="btn btn-ghost">Talk to Us</a>
+      </div>
+    </div>
+    <p class="pricing-note">All plans include SSL, automatic updates, and data export. Cancel anytime.</p>
+  </div>
+</section>
+
+<!-- REQUEST ACCESS -->
+<section class="section cta-section" id="request">
+  <div class="container cta-grid">
+    <div>
+      <span class="eyebrow" style="color:var(--cyan)">Get Started</span>
+      <h2>Ready to modernize your front desk?</h2>
+      <p class="sub">Tell us about your organization and we'll set up your Sentinels Sign-In workspace — usually within one business day.</p>
+      <ul class="cta-points">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Free onboarding &amp; kiosk setup guidance</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Works on the tablets you already own</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Migration help from paper logs or other tools</li>
+      </ul>
+    </div>
+    <div class="form-card">
+      <h3>Request access</h3>
+      <p class="fc-sub">We'll reach out with your login details and next steps.</p>
+      <form id="accessForm">
+        <div class="field-row">
+          <div class="field">
+            <label for="name">Your name *</label>
+            <input id="name" name="name" type="text" required placeholder="Jane Smith">
+          </div>
+          <div class="field">
+            <label for="email">Work email *</label>
+            <input id="email" name="email" type="email" required placeholder="jane@company.com">
+          </div>
+        </div>
+        <div class="field">
+          <label for="company">Company / organization *</label>
+          <input id="company" name="company" type="text" required placeholder="Acme Corp">
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="size">Team size</label>
+            <select id="size" name="size">
+              <option value="">Select…</option>
+              <option>1–10</option><option>11–50</option><option>51–200</option><option>200+</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="plan">Interested plan</label>
+            <select id="plan" name="plan">
+              <option value="">Not sure yet</option>
+              <option>Starter (Free)</option><option>Pro</option><option>Enterprise</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">Request Access</button>
+        <div class="form-msg ok" id="msgOk">✓ Thanks! Your request has been received — we'll be in touch within one business day.</div>
+        <div class="form-msg err" id="msgErr">Something went wrong sending your request. Please email us directly at hello@sentinelskiosk.com.</div>
+      </form>
+      <p class="form-note">By submitting, you agree to be contacted about Sentinels Sign-In. No spam, ever.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="logo">
+          <span class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></span>
+          Sentinels&nbsp;Sign-In
+        </div>
+        <p>Modern visitor management for offices, schools, clinics, and facilities that take security seriously.</p>
+      </div>
+      <div>
+        <h4>Product</h4>
+        <ul>
+          <li><a href="#how">How It Works</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#compare">Compare</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Customers</h4>
+        <ul>
+          <li><a href="https://app.sentinelskiosk.com/login">Sign In</a></li>
+          <li><a href="#request">Request Access</a></li>
+          <li><a href="mailto:support@sentinelskiosk.com">Support</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="mailto:hello@sentinelskiosk.com">Contact</a></li>
+          <li><a href="https://sentinelsit.com" target="_blank" rel="noopener">SentinelsIT</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year">2026</span> SentinelsIT · Sentinels Sign-In. All rights reserved.</span>
+      <span><a href="https://app.sentinelskiosk.com/login">Customer Sign In →</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // sticky nav
+  var nav = document.getElementById('nav');
+  function onScroll(){ nav.classList.toggle('scrolled', window.scrollY > 40); }
+  window.addEventListener('scroll', onScroll); onScroll();
+
+  // mobile menu
+  document.getElementById('hamburger').addEventListener('click', function(){
+    nav.classList.toggle('open');
+  });
+  document.querySelectorAll('#navLinks a').forEach(function(a){
+    a.addEventListener('click', function(){ nav.classList.remove('open'); });
+  });
+
+  // current year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // request-access form
+  document.getElementById('accessForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    var btn = document.getElementById('submitBtn');
+    var ok = document.getElementById('msgOk');
+    var err = document.getElementById('msgErr');
+    ok.style.display = 'none'; err.style.display = 'none';
+    btn.disabled = true; btn.textContent = 'Sending…';
+    var payload = {
+      name: document.getElementById('name').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      company: document.getElementById('company').value.trim(),
+      team_size: document.getElementById('size').value || null,
+      plan: document.getElementById('plan').value || null
+    };
+    try {
+      var res = await fetch('https://api.sentinelskiosk.com/api/access-requests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) throw new Error('bad status');
+      ok.style.display = 'block';
+      document.getElementById('accessForm').reset();
+    } catch (ex) {
+      err.style.display = 'block';
+    } finally {
+      btn.disabled = false; btn.textContent = 'Request Access';
+    }
+  });
+</script>
+</body>
+</html>
