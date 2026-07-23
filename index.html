@@ -485,7 +485,7 @@
     <div>
       <span class="eyebrow" style="color:var(--cyan)">Get Started</span>
       <h2>Ready to modernize your front desk?</h2>
-      <p class="sub">Tell us about your organization and we'll set up your Sentinels Sign-In workspace — usually within one business day.</p>
+      <p class="sub">Tell us about your organization and get <strong>instant access to a 3-day demo</strong> — your login credentials arrive by email within seconds. Like it? We'll set up your plan.</p>
       <ul class="cta-points">
         <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Free onboarding &amp; kiosk setup guidance</li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Works on the tablets you already own</li>
@@ -493,8 +493,8 @@
       </ul>
     </div>
     <div class="form-card">
-      <h3>Request access</h3>
-      <p class="fc-sub">We'll reach out with your login details and next steps.</p>
+      <h3>Start your 3-day demo</h3>
+      <p class="fc-sub">Instant access — your demo credentials are emailed to you right away. No card required.</p>
       <form id="accessForm">
         <div class="field-row">
           <div class="field">
@@ -526,9 +526,9 @@
             </select>
           </div>
         </div>
-        <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">Request Access</button>
-        <div class="form-msg ok" id="msgOk">✓ Thanks! Your request has been received — we'll be in touch within one business day.</div>
-        <div class="form-msg err" id="msgErr">Something went wrong sending your request. Please email us directly at hello@sentinelskiosk.com.</div>
+        <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">Start My Demo</button>
+        <div class="form-msg ok" id="msgOk">✓ Check your inbox — your 3-day demo login was just emailed to you. (Spam folder if you don't see it.)</div>
+        <div class="form-msg err" id="msgErr">Something went wrong creating your demo. Please email us directly at hello@sentinelskiosk.com.</div>
       </form>
       <p class="form-note">By submitting, you agree to be contacted about Sentinels Sign-In. No spam, ever.</p>
     </div>
@@ -605,26 +605,33 @@
     var err = document.getElementById('msgErr');
     ok.style.display = 'none'; err.style.display = 'none';
     btn.disabled = true; btn.textContent = 'Sending…';
+    var fullName = document.getElementById('name').value.trim();
+    var parts = fullName.split(/\s+/);
     var payload = {
-      name: document.getElementById('name').value.trim(),
+      first_name: parts[0] || '',
+      last_name: parts.slice(1).join(' ') || '-',
       email: document.getElementById('email').value.trim(),
       company: document.getElementById('company').value.trim(),
       team_size: document.getElementById('size').value || null,
-      plan: document.getElementById('plan').value || null
+      plan_interest: document.getElementById('plan').value || null
     };
     try {
-      var res = await fetch('https://api.sentinelskiosk.com/api/access-requests', {
+      var res = await fetch('https://api.sentinelskiosk.com/api/auth/demo-request', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
-      if (!res.ok) throw new Error('bad status');
+      var data = await res.json().catch(function(){ return {}; });
+      if (!res.ok) {
+        err.textContent = data.error || 'Something went wrong creating your demo. Please email us directly at hello@sentinelskiosk.com.';
+        throw new Error('bad status');
+      }
       ok.style.display = 'block';
       document.getElementById('accessForm').reset();
     } catch (ex) {
       err.style.display = 'block';
     } finally {
-      btn.disabled = false; btn.textContent = 'Request Access';
+      btn.disabled = false; btn.textContent = 'Start My Demo';
     }
   });
 </script>
