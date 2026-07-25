@@ -77,10 +77,21 @@
   .float-card{position:absolute;background:rgba(255,255,255,.97);border-radius:16px;padding:13px 17px;box-shadow:0 20px 50px rgba(0,0,0,.35);display:flex;align-items:center;gap:11px;font-size:13px;font-weight:700;color:var(--navy);z-index:3}
   .float-card .ic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
   .float-card small{display:block;font-size:11px;font-weight:600;color:var(--muted)}
-  .fc1{top:6%;right:-2%;animation:float 5s ease-in-out infinite}
-  .fc2{bottom:12%;left:-4%;animation:float 6s ease-in-out infinite reverse}
+  .fc1{top:-7%;left:2%;animation:float 5s ease-in-out infinite}
+  .fc2{bottom:-5%;right:-4%;animation:float 6s ease-in-out infinite reverse}
   @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
-  @media(max-width:920px){.hero-grid{grid-template-columns:1fr}.kiosk-wrap{max-width:440px;margin:0 auto}.fc2{left:0}.fc1{right:0}}
+  @media(max-width:920px){
+    .hero-grid{grid-template-columns:1fr}
+    .kiosk-wrap{max-width:440px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+    .float-card{position:static;animation:none;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+    .fc1{order:1}
+    .kiosk{order:2}
+    .fc2{order:3;align-self:flex-end}
+  }
+  @media(max-width:480px){
+    .float-card{font-size:12px;padding:11px 14px}
+    .hero{padding-top:130px}
+  }
 
   /* ─── Trust strip ─── */
   .strip{background:var(--navy);padding:22px 0;border-top:1px solid rgba(255,255,255,.07)}
