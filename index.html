@@ -162,7 +162,7 @@
 <style>
   /* ─── Pricing ─── */
   .pricing-section{background:linear-gradient(180deg,var(--bg-soft),#fff)}
-  .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch}
+  .plans{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;align-items:stretch;max-width:880px;margin:0 auto}
   .plan{background:#fff;border:1px solid var(--line);border-radius:22px;padding:34px 30px;display:flex;flex-direction:column;position:relative;transition:transform .2s,box-shadow .2s}
   .plan:hover{transform:translateY(-4px);box-shadow:0 20px 50px rgba(15,23,42,.1)}
   .plan.featured{border:2px solid var(--teal);box-shadow:0 24px 60px rgba(13,115,119,.16)}
@@ -238,7 +238,7 @@
       <a class="nl" href="#pricing">Pricing</a>
       <a class="nl" href="#faq">FAQ</a>
       <a class="btn btn-light nav-cta" href="https://app.sentinelskiosk.com">Sign In</a>
-      <a class="btn btn-orange nav-cta" href="#request">Start Free Demo</a>
+      <a class="btn btn-orange nav-cta" href="#request">Start Free Trial</a>
     </div>
   </div>
 </nav>
@@ -251,7 +251,7 @@
       <h1>Know exactly <span class="accent">who's in your building</span> — always.</h1>
       <p class="sub">Sentinels Kiosk turns any tablet into a smart front desk: visitors check in on a touchscreen, hosts get notified instantly, and your security team sees every arrival — including the ones you'd rather keep out.</p>
       <div class="hero-ctas">
-        <a class="btn btn-orange" href="#request">Start Your 3-Day Demo →</a>
+        <a class="btn btn-orange" href="#request">Start Your 14-Day Free Trial →</a>
         <a class="btn btn-ghost" style="color:#fff;border-color:rgba(255,255,255,.35)" href="#features">Explore Features</a>
       </div>
       <div class="hero-stats">
@@ -551,30 +551,16 @@
     <div class="section-head">
       <span class="eyebrow">Pricing</span>
       <h2>Simple plans that scale with you</h2>
-      <p>Start free. Upgrade when your front desk does. No proprietary hardware, no contracts, no surprises.</p>
+      <p>Every plan starts with a 14-day free trial — no credit card required. No proprietary hardware, no contracts, no surprises.</p>
     </div>
     <div class="plans">
-      <div class="plan">
-        <h3>Starter</h3>
-        <p class="desc">For small offices getting started with digital check-in.</p>
-        <div class="price">$0<span> /month</span></div>
-        <ul>
-          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>1 kiosk device, 1 location</li>
-          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Up to 100 visits / month</li>
-          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Up to 5 team members</li>
-          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Visitor check-in &amp; check-out</li>
-          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Email host notifications</li>
-          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Live visit log &amp; CSV export</li>
-        </ul>
-        <a href="#request" class="btn btn-ghost">Start Free</a>
-      </div>
       <div class="plan featured">
         <span class="plan-tag">MOST POPULAR</span>
         <h3>Pro</h3>
         <p class="desc">For busy front desks that need the full visitor journey.</p>
         <div class="price">$49<span> /month</span></div>
         <ul>
-          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Everything in Starter</li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Visitor check-in/out, live log &amp; CSV export</li>
           <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>2,000 visits / month, up to 5 kiosks</li>
           <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Up to 25 team members + custom roles</li>
           <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Pre-registration, QR invites &amp; staff badges</li>
@@ -582,7 +568,7 @@
           <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Photo capture, SMS notifications &amp; NDA</li>
           <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Reports &amp; compliance view</li>
         </ul>
-        <a href="#request" class="btn btn-primary">Start 3-Day Demo</a>
+        <a href="#request" class="btn btn-primary">Start 14-Day Free Trial</a>
       </div>
       <div class="plan">
         <h3>Enterprise</h3>
@@ -592,7 +578,8 @@
           <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Everything in Pro</li>
           <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>100k visits / month, up to 50 kiosks</li>
           <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Unlimited team members</li>
-          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Nightly backups &amp; one-click restore</li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Scheduled backups &amp; one-click restore</li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>UniFi camera auto check-in/out</li>
           <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>RFID card &amp; frequent-visitor programs</li>
           <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Custom branding &amp; onboarding help</li>
           <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Priority support</li>
@@ -600,7 +587,7 @@
         <a href="#request" class="btn btn-ghost">Talk to Us</a>
       </div>
     </div>
-    <p class="pricing-note">All plans include SSL, automatic updates, data export, and the kiosk app. Cancel anytime.<br>*No hardware purchase required — the kiosk runs on the tablets you already own. RFID readers optional (~$15).</p>
+    <p class="pricing-note">All plans include SSL, automatic updates, data export, and the kiosk app. Cancel anytime — your 14-day trial needs no credit card.<br>*No hardware purchase required — the kiosk runs on the tablets you already own. RFID readers optional (~$15).</p>
   </div>
 </section>
 
@@ -617,8 +604,8 @@
         <div class="fa-body">Any tablet, laptop, or PC with a browser — iPad, Android tablet, even an old laptop works. The kiosk is a web app, so there's nothing to install and nothing proprietary to buy. Optional extras: a $15 USB QR/barcode scanner for badge scanning, and a $15–25 USB RFID reader if you want card tapping.</div>
       </details>
       <details>
-        <summary>How does the 3-day demo work? <span class="chev">+</span></summary>
-        <div class="fa-body">Fill in the form below and your login credentials are created and emailed to you within seconds — no card required. You get a working organization with sample features enabled for 3 days. When you're ready, we activate your paid plan and keep everything you set up.</div>
+        <summary>How does the 14-day free trial work? <span class="chev">+</span></summary>
+        <div class="fa-body">Fill in the form below and your login credentials are created and emailed to you within seconds — no credit card required. You get a working organization with every feature of the Pro plan enabled for 14 days. When you're ready, pick a plan and keep everything you set up.</div>
       </details>
       <details>
         <summary>Do visitors need to install anything? <span class="chev">+</span></summary>
@@ -646,17 +633,17 @@
     <div>
       <span class="eyebrow" style="color:var(--cyan)">Get Started</span>
       <h2>Ready to modernize your front desk?</h2>
-      <p class="sub">Tell us about your organization and get <strong>instant access to a 3-day demo</strong> — your login credentials arrive by email within seconds. Like it? We'll set up your plan.</p>
+      <p class="sub">Tell us about your organization and get <strong>instant access to a 14-day free trial</strong> — your login credentials arrive by email within seconds. Like it? Pick a plan and keep everything.</p>
       <ul class="cta-points">
         <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Free onboarding &amp; kiosk setup guidance</li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Works on the tablets you already own</li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Migration help from paper logs or other tools</li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>No credit card required for the demo</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>No credit card required for the trial</li>
       </ul>
     </div>
     <div class="form-card">
-      <h3>Start your 3-day demo</h3>
-      <p class="fc-sub">Instant access — your demo credentials are emailed to you right away. No card required.</p>
+      <h3>Start your 14-day free trial</h3>
+      <p class="fc-sub">Instant access — your trial credentials are emailed to you right away. No credit card required.</p>
       <form id="accessForm">
         <div class="field-row">
           <div class="field">
@@ -684,13 +671,13 @@
             <label for="plan">Interested plan</label>
             <select id="plan" name="plan">
               <option value="">Not sure yet</option>
-              <option>Starter (Free)</option><option>Pro</option><option>Enterprise</option>
+              <option>Pro</option><option>Enterprise</option><option>Not sure yet</option>
             </select>
           </div>
         </div>
-        <button type="submit" class="btn btn-orange btn-lg" id="submitBtn">Start My Demo</button>
-        <div class="form-msg ok" id="msgOk">✓ Check your inbox — your 3-day demo login was just emailed to you. (Spam folder if you don't see it.)</div>
-        <div class="form-msg err" id="msgErr">Something went wrong creating your demo. Please email us directly at hello@sentinelskiosk.com.</div>
+        <button type="submit" class="btn btn-orange btn-lg" id="submitBtn">Start My Free Trial</button>
+        <div class="form-msg ok" id="msgOk">✓ Check your inbox — your 14-day trial login was just emailed to you. (Spam folder if you don't see it.)</div>
+        <div class="form-msg err" id="msgErr">Something went wrong creating your trial. Please email us directly at hello@sentinelskiosk.com.</div>
       </form>
       <p class="form-note">By submitting, you agree to be contacted about Sentinels Kiosk. No spam, ever.</p>
     </div>
@@ -745,7 +732,7 @@
       });
       var data = await res.json().catch(function(){ return {}; });
       if (!res.ok) {
-        err.textContent = data.error || 'Something went wrong creating your demo. Please email us directly at hello@sentinelskiosk.com.';
+        err.textContent = data.error || 'Something went wrong creating your trial. Please email us directly at hello@sentinelskiosk.com.';
         throw new Error('bad status');
       }
       ok.style.display = 'block';
@@ -753,7 +740,7 @@
     } catch (ex) {
       err.style.display = 'block';
     } finally {
-      btn.disabled = false; btn.textContent = 'Start My Demo';
+      btn.disabled = false; btn.textContent = 'Start My Free Trial';
     }
   });
 </script>
