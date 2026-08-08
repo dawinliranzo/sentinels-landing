@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SMS Notifications Opt-In — Sentinels Kiosk</title>
+<meta name="description" content="Opt in to receive transactional SMS notifications from Sentinels Kiosk: visitor arrival alerts and security notifications on behalf of your organization.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<style>
+  :root{--teal:#0D7377;--teal-dark:#0A5A5D;--orange:#FF6B35;--ink:#0F172A;--muted:#64748B;--line:#E2E8F0;--bg:#F8FAFC}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+  .topbar{background:#fff;border-bottom:1px solid var(--line);padding:16px 24px;display:flex;align-items:center;gap:12px}
+  .topbar img{height:32px;width:32px}
+  .topbar .brand{font-size:18px;font-weight:800;color:var(--ink);text-decoration:none}
+  .topbar .brand span{color:var(--teal)}
+  .wrap{max-width:640px;margin:48px auto;padding:0 20px}
+  h1{font-size:30px;font-weight:800;margin-bottom:12px}
+  .lead{color:var(--muted);font-size:15.5px;margin-bottom:28px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:32px;box-shadow:0 4px 20px rgba(15,23,42,.06)}
+  .card h2{font-size:18px;font-weight:700;margin-bottom:6px}
+  .card .sub{color:var(--muted);font-size:13.5px;margin-bottom:20px}
+  label.field{display:block;font-size:13px;font-weight:600;color:#475569;margin-bottom:6px}
+  input[type=tel]{width:100%;padding:13px 16px;border:2px solid var(--line);border-radius:12px;font-size:15px;outline:none;font-family:inherit}
+  input[type=tel]:focus{border-color:var(--teal)}
+  .consent{display:flex;gap:12px;align-items:flex-start;background:#F0FDFA;border:1px solid #99F6E4;border-radius:12px;padding:16px;margin:20px 0}
+  .consent input[type=checkbox]{width:20px;height:20px;margin-top:2px;flex-shrink:0;cursor:pointer}
+  .consent label{font-size:13.5px;color:#134E4A;line-height:1.6;cursor:pointer}
+  .consent a{color:var(--teal);font-weight:600}
+  button{width:100%;padding:15px;border:none;border-radius:12px;background:var(--teal);color:#fff;font-size:15.5px;font-weight:700;cursor:pointer;font-family:inherit}
+  button:hover{background:var(--teal-dark)}
+  button:disabled{opacity:.6;cursor:wait}
+  .msg{display:none;margin-top:16px;padding:14px 16px;border-radius:12px;font-size:14px;font-weight:600}
+  .msg.ok{display:block;background:#ECFDF5;border:1px solid #A7F3D0;color:#065F46}
+  .msg.err{display:block;background:#FEF2F2;border:1px solid #FECACA;color:#991B1B}
+  .fine{margin-top:24px;font-size:12.5px;color:var(--muted);line-height:1.7}
+  .fine strong{color:#475569}
+  footer{margin-top:40px;padding-top:20px;border-top:1px solid var(--line);display:flex;gap:20px;flex-wrap:wrap;font-size:13px}
+  footer a{color:var(--teal);text-decoration:none;font-weight:600}
+  footer a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <img src="/favicon.svg" alt="Sentinels Kiosk logo">
+  <a class="brand" href="/">Sentinels <span>Kiosk</span></a>
+</div>
+
+<div class="wrap">
+  <h1>SMS Notifications Opt-In</h1>
+  <p class="lead">
+    Sentinels Kiosk sends <strong>transactional</strong> text messages on behalf of organizations that use our
+    visitor-management platform — for example, alerting a host that their visitor has arrived, or notifying an
+    administrator about a security or offline event. We never send marketing or promotional texts.
+    If your organization uses Sentinels Kiosk, use this page to opt in to SMS notifications.
+  </p>
+
+  <div class="card">
+    <h2>Opt in to text messages</h2>
+    <p class="sub">Enter your mobile number and check the consent box. You can opt out at any time by replying STOP.</p>
+
+    <form id="f" novalidate>
+      <label class="field" for="phone">Mobile number (include country code)</label>
+      <input type="tel" id="phone" name="phone" placeholder="+1 305 555 0134" autocomplete="tel">
+
+      <div class="consent">
+        <input type="checkbox" id="consent">
+        <label for="consent">
+          I agree to receive recurring transactional SMS notifications from Sentinels Kiosk on behalf of my
+          organization (visitor arrival alerts and security/offline notifications). Message frequency varies.
+          Message and data rates may apply. Reply STOP to cancel, HELP for help. Consent is not a condition of
+          purchase. See our <a href="/privacy.html">Privacy Policy</a> and
+          <a href="/terms.html">Terms of Service</a>.
+        </label>
+      </div>
+
+      <button type="submit" id="btn">Opt In to SMS Notifications</button>
+      <div class="msg ok" id="ok">✓ You're opted in — your consent was recorded. Reply STOP at any time to cancel.</div>
+      <div class="msg err" id="err"></div>
+    </form>
+
+    <div class="fine">
+      <strong>Opt-out:</strong> reply <strong>STOP</strong> to any message — you'll get one confirmation and no further texts.
+      <strong>Help:</strong> reply <strong>HELP</strong> or email <a href="mailto:support@sentinelskiosk.com" style="color:var(--teal)">support@sentinelskiosk.com</a>.
+      Carriers are not liable for delayed or undelivered messages.
+    </div>
+  </div>
+
+  <footer>
+    <a href="/">← Back to sentinelskiosk.com</a>
+    <a href="/privacy.html">Privacy Policy</a>
+    <a href="/terms.html">Terms of Service</a>
+  </footer>
+</div>
+
+<script>
+var form = document.getElementById('f');
+var btn = document.getElementById('btn');
+var ok = document.getElementById('ok');
+var err = document.getElementById('err');
+
+form.addEventListener('submit', async function (e) {
+  e.preventDefault();
+  ok.className = 'msg ok'; ok.style.display = 'none';
+  err.className = 'msg err'; err.style.display = 'none';
+
+  var phone = document.getElementById('phone').value.trim();
+  var consent = document.getElementById('consent').checked;
+  var digits = phone.replace(/\D/g, '');
+
+  if (digits.length < 7 || digits.length > 15) {
+    err.textContent = 'Enter a valid mobile number, including country code (e.g. +1...)';
+    err.style.display = 'block'; return;
+  }
+  if (!consent) {
+    err.textContent = 'Please check the consent box to opt in';
+    err.style.display = 'block'; return;
+  }
+
+  btn.disabled = true; btn.textContent = 'Submitting…';
+  try {
+    var res = await fetch('https://api.sentinelskiosk.com/api/auth/sms-consent', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone: phone, consent: consent })
+    });
+    var data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Could not record your consent. Please try again.');
+    ok.style.display = 'block';
+    form.reset();
+  } catch (ex) {
+    err.textContent = ex.message;
+    err.style.display = 'block';
+  }
+  btn.disabled = false; btn.textContent = 'Opt In to SMS Notifications';
+});
+</script>
+</body>
+</html>
